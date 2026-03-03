@@ -131,7 +131,7 @@ export default async function SuperAdminDashboard() {
                         </div>
 
                         <div className="space-y-4">
-                            {institutions.map(inst => (
+                            {institutions.map((inst: any) => (
                                 <div key={inst.id} className="p-6 bg-white rounded-[2.5rem] border border-slate-100 flex items-center justify-between gap-6">
                                     <div className="flex items-center gap-5">
                                         <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 overflow-hidden font-bold">
@@ -163,7 +163,7 @@ export default async function SuperAdminDashboard() {
                         </div>
 
                         <div className="space-y-4">
-                            {events.map(event => (
+                            {events.map((event: any) => (
                                 <div key={event.id} className="p-6 bg-white rounded-[2.5rem] border border-slate-100 flex items-center justify-between gap-6">
                                     <div className="space-y-2 flex-1">
                                         <h3 className="font-medium text-slate-900 line-clamp-1">{event.title}</h3>
