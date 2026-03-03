@@ -1,10 +1,13 @@
 <div align="center">
   <img src="public/logo.png" alt="EventEdu Logo" width="200" />
+  <h1>EventEdu Platform</h1>
+  <p>
+    <a href="#tech-stack">Tech Stack</a> | 
+    <a href="#features">Features</a> | 
+    <a href="#development-setup">Setup</a> | 
+    <a href="#deployment">Deployment</a>
+  </p>
 </div>
-
-# EventEdu Platform
-
-[Tech Stack](#tech-stack) | [Features](#features) | [Setup](#development-setup) | [Deployment](#deployment)
 
 ---
 
