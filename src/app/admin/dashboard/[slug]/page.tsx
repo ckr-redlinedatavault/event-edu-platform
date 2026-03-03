@@ -7,12 +7,20 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import AdminSidebar from "@/components/AdminSidebar";
 import { Calendar, Eye, Settings, Users } from "lucide-react";
 import AdminEventForm from "@/components/AdminEventForm";
+import { getSession } from "@/lib/session";
+
 interface PageProps {
     params: Promise<{ slug: string }>;
     searchParams: Promise<{ edit?: string; create?: string }>;
 }
+
 export default async function InstitutionDashboard(props: PageProps) {
+    const session = await getSession();
     const { slug } = await props.params;
+
+    if (!session || session.role !== "ADMIN" || session.slug !== slug) {
+        redirect("/admin/login");
+    }
     const searchParams = await props.searchParams;
     const editId = searchParams?.edit;
     const showCreate = searchParams?.create === 'true';

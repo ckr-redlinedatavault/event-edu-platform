@@ -1,6 +1,7 @@
+import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 import Link from "next/link";
+
 export default function SuperAdminLoginPage() {
     async function loginSuperAdmin(formData: FormData) {
         "use server";
@@ -8,14 +9,9 @@ export default function SuperAdminLoginPage() {
         const password = formData.get("password") as string;
         const correctEmail = process.env.SUPER_ADMIN_EMAIL;
         const correctPassword = process.env.SUPER_ADMIN_PASSWORD;
+
         if (email === correctEmail && password === correctPassword) {
-            const cookieStore = await cookies();
-            cookieStore.set("super_admin_session", "authenticated", {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                maxAge: 60 * 60 * 24, 
-                path: "/",
-            });
+            await createSession("super-admin", "SUPER_ADMIN");
             redirect("/super-admin/dashboard");
         } else {
             redirect("/super-admin/login?error=invalid_credentials");

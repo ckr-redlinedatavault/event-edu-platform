@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import bcrypt from "bcryptjs";
+import { createSession } from "@/lib/session";
+
 export default function AdminLoginPage() {
     async function loginAdmin(formData: FormData) {
         "use server";
@@ -17,6 +19,9 @@ export default function AdminLoginPage() {
         }
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) return;
+
+        await createSession(user.id, "ADMIN", { institutionId: user.institutionId, slug: user.institution.slug });
+
         redirect(`/admin/dashboard/${user.institution.slug}`);
     }
     return (

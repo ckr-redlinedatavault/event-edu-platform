@@ -1,14 +1,14 @@
 import { prisma } from "@/lib/db";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { format } from "date-fns";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { getSession, deleteSession } from "@/lib/session";
+
 export default async function SuperAdminDashboard() {
-    const cookieStore = await cookies();
-    const session = cookieStore.get("super_admin_session");
-    if (!session || session.value !== "authenticated") {
+    const session = await getSession();
+    if (!session || session.role !== "SUPER_ADMIN") {
         redirect("/super-admin/login");
     }
     const institutions = await prisma.institution.findMany({
@@ -51,8 +51,7 @@ export default async function SuperAdminDashboard() {
     }
     async function logout() {
         "use server";
-        const cookieStore = await cookies();
-        cookieStore.delete("super_admin_session");
+        await deleteSession();
         redirect("/super-admin/login");
     }
     return (
