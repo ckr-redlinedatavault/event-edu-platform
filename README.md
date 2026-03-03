@@ -6,13 +6,15 @@ A high-performance, institutional event management infrastructure designed for s
 
 ### Tech Stack
 
-*   **Framework:** [Next.js 16](https://nextjs.org/) (App Router + Turbopack)
-*   **Frontend:** [React 19](https://react.dev/) / [Tailwind CSS 4](https://tailwindcss.com/)
-*   **Database:** [Supabase](https://supabase.com/) (PostgreSQL)
-*   **ORM:** [Prisma](https://www.prisma.io/)
-*   **Icons:** [Lucide React](https://lucide.dev/)
-*   **Motion:** [Lenis](https://lenis.darkroom.engineering/) (Smooth Scroll)
-*   **Security:** [Bcrypt.js](https://www.npmjs.com/package/bcryptjs)
+| Category | Technology |
+| :--- | :--- |
+| **Framework** | [Next.js 16](https://nextjs.org/) (App Router + Turbopack) |
+| **Frontend** | [React 19](https://react.dev/) / [Tailwind CSS 4](https://tailwindcss.com/) |
+| **Database** | [Supabase](https://supabase.com/) (PostgreSQL) |
+| **ORM** | [Prisma](https://www.prisma.io/) |
+| **Icons** | [Lucide React](https://lucide.dev/) |
+| **Motion** | [Lenis](https://lenis.darkroom.engineering/) (Smooth Scroll) |
+| **Security** | [Bcrypt.js](https://www.npmjs.com/package/bcryptjs) |
 
 ---
 
