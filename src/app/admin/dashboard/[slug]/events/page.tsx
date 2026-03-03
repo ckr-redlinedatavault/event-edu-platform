@@ -4,14 +4,11 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import AdminSidebar from "@/components/AdminSidebar";
 import { format } from "date-fns";
 import { Calendar, Search, Filter, MoreVertical } from "lucide-react";
-
 interface Props {
     params: Promise<{ slug: string }>;
 }
-
 export default async function AdminEventsPage({ params }: Props) {
     const { slug } = await params;
-
     const institution = await prisma.institution.findUnique({
         where: { slug },
         include: {
@@ -23,9 +20,7 @@ export default async function AdminEventsPage({ params }: Props) {
             }
         },
     });
-
     if (!institution) notFound();
-
     return (
         <div className="flex min-h-screen bg-gray-50/50">
             <AdminSidebar
@@ -33,7 +28,6 @@ export default async function AdminEventsPage({ params }: Props) {
                 institutionName={institution.name}
                 logo={institution.logo}
             />
-
             <main className="flex-1 flex flex-col h-screen overflow-y-auto">
                 <header className="bg-white border-b border-gray-100 p-6 flex-shrink-0">
                     <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -50,7 +44,6 @@ export default async function AdminEventsPage({ params }: Props) {
                         </div>
                     </div>
                 </header>
-
                 <div className="p-6 lg:p-8 max-w-6xl mx-auto w-full">
                     <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                         <div className="p-6 border-b border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4 bg-white/50">
@@ -64,7 +57,6 @@ export default async function AdminEventsPage({ params }: Props) {
                                 </button>
                             </div>
                         </div>
-
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse">
                                 <thead>

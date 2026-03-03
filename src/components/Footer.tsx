@@ -1,11 +1,8 @@
 import Link from "next/link";
-
 export default function Footer() {
     return (
         <footer className="bg-white pt-16 pb-10 border-t border-gray-100">
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-8">
-
-                {/* Brand Column */}
                 <div className="space-y-6">
                     <Link href="/" className="inline-block group">
                         <img
@@ -18,8 +15,6 @@ export default function Footer() {
                         Building the infrastructure for the next generation of campus life. Scalable, secure, and seamless.
                     </p>
                 </div>
-
-                {/* Links Column 1 */}
                 <div>
                     <h4 className="text-xs uppercase tracking-widest text-gray-900 mb-6">Platform</h4>
                     <ul className="space-y-4 text-sm text-gray-500">
@@ -29,8 +24,6 @@ export default function Footer() {
                         <li><Link href="/pricing" className="hover:text-black transition-colors">Pricing</Link></li>
                     </ul>
                 </div>
-
-                {/* Links Column 2 */}
                 <div>
                     <h4 className="text-xs uppercase tracking-widest text-gray-900 mb-6">Support</h4>
                     <ul className="space-y-4 text-sm text-gray-500">
@@ -40,8 +33,6 @@ export default function Footer() {
                         <li><Link href="/devs" className="hover:text-black transition-colors">Developer Portal</Link></li>
                     </ul>
                 </div>
-
-                {/* Newsletter Column */}
                 <div>
                     <h4 className="text-xs uppercase tracking-widest text-gray-900 mb-6">Join Us</h4>
                     <p className="text-sm text-gray-500 mb-4">
@@ -59,8 +50,6 @@ export default function Footer() {
                     </div>
                 </div>
             </div>
-
-            {/* Subtle Bottom Copyright Bar */}
             <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between text-xs text-gray-400">
                 <p>© {new Date().getFullYear()} EventEdu. All rights reserved.</p>
                 <div className="flex gap-6 mt-4 md:mt-0">

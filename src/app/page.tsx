@@ -6,7 +6,6 @@ import EventTicker from "@/components/EventTicker";
 import Footer from "@/components/Footer";
 import BottomBar from "@/components/BottomBar";
 import SmoothScroll from "@/components/SmoothScroll";
-
 export default async function LandingPage() {
   const institutions = await prisma.institution.findMany({
     take: 6,
@@ -21,17 +20,13 @@ export default async function LandingPage() {
       }
     }
   });
-
   return (
     <SmoothScroll>
       <div className="flex flex-col min-h-screen">
         <Navbar />
-
         <main className="flex-grow">
           <Hero />
           <EventTicker />
-
-          {/* Institutions Section */}
           <section className="py-16 bg-white">
             <div className="max-w-7xl mx-auto px-6">
               <div className="flex flex-col items-start text-left mb-12 space-y-4">
@@ -45,7 +40,6 @@ export default async function LandingPage() {
                   Connect with accredited colleges and universities through our secure global event infrastructure.
                 </p>
               </div>
-
               {institutions.length === 0 ? (
                 <div className="text-center py-16 bg-gray-50/50 rounded-3xl border border-dashed border-gray-200">
                   <p className="text-gray-400 text-xs font-medium uppercase tracking-wide">No institutions onboarded yet.</p>
@@ -68,15 +62,12 @@ export default async function LandingPage() {
                           inst.name[0]
                         )}
                       </div>
-
                       <h3 className="text-xl font-medium text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
                         {inst.name}
                       </h3>
-
                       <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-8 flex-grow">
                         {inst.description || "Leading educational institution dedicated to academic excellence and vibrant campus life."}
                       </p>
-
                       <div className="flex items-center justify-between pt-6 border-t border-gray-50">
                         <div className="flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
@@ -96,12 +87,9 @@ export default async function LandingPage() {
               )}
             </div>
           </section>
-
-          {/* Full-Width CTA Section */}
           <section className="bg-black py-20 px-6 text-center text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full -mr-64 -mt-64 blur-[120px]"></div>
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full -ml-64 -mb-64 blur-[120px]"></div>
-
             <div className="relative z-10 space-y-8 max-w-7xl mx-auto">
               <h2 className="text-4xl md:text-6xl tracking-tight leading-tight font-normal">Ready to transform your <br /> campus life?</h2>
               <p className="text-gray-400 text-lg max-w-2xl mx-auto font-normal">
@@ -118,7 +106,6 @@ export default async function LandingPage() {
             </div>
           </section>
         </main>
-
         <Footer />
         <BottomBar />
       </div>

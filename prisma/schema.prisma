@@ -2,17 +2,14 @@ generator client {
   provider   = "prisma-client-js"
   engineType = "library"
 }
-
 datasource db {
   provider = "postgresql"
 }
-
 enum Role {
   SUPER_ADMIN
   ADMIN
   STUDENT
 }
-
 model User {
   id            String         @id @default(uuid())
   email         String         @unique
@@ -25,7 +22,6 @@ model User {
   registrations Registration[]
   createdAt     DateTime       @default(now())
 }
-
 model Institution {
   id          String   @id @default(uuid())
   name        String
@@ -36,7 +32,6 @@ model Institution {
   events      Event[]
   createdAt   DateTime @default(now())
 }
-
 model Event {
   id                   String         @id @default(uuid())
   title                String
@@ -62,11 +57,9 @@ model Event {
   institution          Institution    @relation(fields: [institutionId], references: [id])
   registrations        Registration[]
   createdAt            DateTime       @default(now())
-
   @@index([institutionId])
   @@index([startDate])
 }
-
 model Registration {
   id        String   @id @default(uuid())
   userId    String
@@ -76,10 +69,8 @@ model Registration {
   user      User     @relation(fields: [userId], references: [id])
   event     Event    @relation(fields: [eventId], references: [id])
   createdAt DateTime @default(now())
-
   @@unique([userId, eventId])
 }
-
 model Ticket {
   id             String       @id @default(uuid())
   registrationId String       @unique

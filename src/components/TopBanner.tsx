@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
-
 export default async function TopBanner() {
     const latestEvents = await prisma.event.findMany({
         take: 5,
         orderBy: { createdAt: "desc" },
         include: { institution: true }
     });
-
     if (latestEvents.length === 0) return null;
-
     return (
         <div className="bg-black text-white h-10 flex items-center overflow-hidden whitespace-nowrap relative z-[60]">
             <div className="flex animate-scroll-left pause-scroll gap-12 px-4">

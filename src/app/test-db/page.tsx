@@ -1,23 +1,18 @@
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 export const dynamic = "force-dynamic";
-
 export default async function TestDBPage() {
     const users = await prisma.user.findMany({
         include: { institution: true },
         orderBy: { createdAt: "desc" },
     });
-
     const institutions = await prisma.institution.findMany();
-
     async function addUser(formData: FormData) {
         "use server";
         const email = formData.get("email") as string;
         const role = formData.get("role") as string;
         const institutionId = formData.get("institutionId") as string;
-
         if (!email || !role) return;
-
         try {
             await prisma.user.create({
                 data: {
@@ -31,14 +26,11 @@ export default async function TestDBPage() {
             console.error("Error adding user:", error);
         }
     }
-
     async function addInstitution(formData: FormData) {
         "use server";
         const name = formData.get("name") as string;
         const slug = formData.get("slug") as string;
-
         if (!name || !slug) return;
-
         try {
             await prisma.institution.create({
                 data: { name, slug },
@@ -48,14 +40,11 @@ export default async function TestDBPage() {
             console.error("Error adding institution:", error);
         }
     }
-
     return (
         <div className="min-h-screen bg-zinc-50 p-8 dark:bg-black dark:text-white pb-20">
             <div className="mx-auto max-w-4xl space-y-8">
                 <h1 className="text-4xl font-bold tracking-tight text-center">Platform Core Test</h1>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Institution Form */}
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800">
                         <h2 className="text-xl font-bold mb-6">1. Create Institution</h2>
                         <form action={addInstitution} className="space-y-4">
@@ -85,8 +74,6 @@ export default async function TestDBPage() {
                             </button>
                         </form>
                     </div>
-
-                    {/* User Form */}
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800">
                         <h2 className="text-xl font-bold mb-6">2. Create User</h2>
                         <form action={addUser} className="space-y-4">
@@ -133,8 +120,6 @@ export default async function TestDBPage() {
                         </form>
                     </div>
                 </div>
-
-                {/* User List */}
                 <div className="bg-white p-8 rounded-2xl shadow-sm border border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800">
                     <h2 className="text-xl font-semibold mb-4">Platform Users</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

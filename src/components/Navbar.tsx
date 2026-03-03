@@ -1,11 +1,8 @@
 import Link from "next/link";
-
 export default function Navbar() {
     return (
         <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 dark:bg-black/80 dark:border-white/10">
             <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-
-                {/* Brand / External Logo */}
                 <Link href="/" className="flex items-center group">
                     <img
                         src="https://ik.imagekit.io/dypkhqxip/Screenshot_2026-03-02_at_23.46.12-removebg-preview.png"
@@ -13,8 +10,6 @@ export default function Navbar() {
                         className="h-11 w-auto object-contain group-hover:opacity-80 transition-opacity"
                     />
                 </Link>
-
-                {/* Navigation Links */}
                 <div className="hidden md:flex gap-8 items-center mr-auto ml-10">
                     <Link href="/events" className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
                         Events
@@ -26,8 +21,6 @@ export default function Navbar() {
                         About
                     </Link>
                 </div>
-
-                {/* Modern Buttons */}
                 <div className="flex items-center gap-3">
                     <Link
                         href="/admin/login"

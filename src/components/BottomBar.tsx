@@ -1,7 +1,5 @@
 "use client";
-
 import React from "react";
-
 const BottomBanner = () => {
     return (
         <footer className="w-full bg-blue-600 border-t border-blue-500/30 py-8 pb-14 md:pb-8 font-sans">
@@ -25,16 +23,13 @@ const BottomBanner = () => {
                                 />
                             </a>
                         </div>
-
                         <div className="hidden sm:block h-5 w-[1px] bg-white/40" />
-
                         <div className="flex items-center gap-2.5 text-white/70">
                             <span className="text-[12px] font-medium tracking-wide">
                                 Designed and Maintained by Redlix Systems
                             </span>
                         </div>
                     </div>
-
                     <div className="flex flex-wrap items-center justify-center md:justify-end gap-4">
                         <a
                             href="https://redlix.co.in/support"
@@ -45,11 +40,9 @@ const BottomBanner = () => {
                             Help & Support
                         </a>
                     </div>
-
                 </div>
             </div>
         </footer>
     );
 };
-
 export default BottomBanner;

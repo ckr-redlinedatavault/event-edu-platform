@@ -7,26 +7,20 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import AdminSidebar from "@/components/AdminSidebar";
 import { Calendar, Eye, Settings, Users } from "lucide-react";
 import AdminEventForm from "@/components/AdminEventForm";
-
 interface PageProps {
     params: Promise<{ slug: string }>;
     searchParams: Promise<{ edit?: string; create?: string }>;
 }
-
 export default async function InstitutionDashboard(props: PageProps) {
     const { slug } = await props.params;
     const searchParams = await props.searchParams;
     const editId = searchParams?.edit;
     const showCreate = searchParams?.create === 'true';
-
     const institutions: any[] = await prisma.$queryRawUnsafe(`
         SELECT * FROM "Institution" WHERE slug = $1
     `, slug);
-
     if (!institutions || institutions.length === 0) notFound();
     const institution = institutions[0] as any;
-
-    // Fetch events with registration counts
     const rawEvents: any[] = await prisma.$queryRawUnsafe(`
         SELECT e.*, 
                (SELECT COUNT(*)::int FROM "Registration" WHERE "eventId" = e.id) as "registrationCount"
@@ -34,17 +28,13 @@ export default async function InstitutionDashboard(props: PageProps) {
         WHERE e."institutionId" = $1
         ORDER BY e."createdAt" DESC
     `, institution.id);
-
-    // Reconstruct template-compatible shape
     institution.events = rawEvents.map((e: any) => ({
         ...e,
         _count: { registrations: e.registrationCount || 0 },
         judges: typeof e.judges === 'string' ? JSON.parse(e.judges) : e.judges,
         ticketTiers: typeof e.ticketTiers === 'string' ? JSON.parse(e.ticketTiers) : e.ticketTiers
     }));
-
     const eventToEdit = editId ? rawEvents.find((e: any) => e.id === editId) || null : null;
-
     async function createEvent(formData: FormData) {
         "use server";
         const title = formData.get("title") as string;
@@ -66,12 +56,9 @@ export default async function InstitutionDashboard(props: PageProps) {
         const ticketTiersJson = formData.get("ticketTiersJson") as string;
         const minTeamSize = formData.get("minTeamSize") as string;
         const maxTeamSize = formData.get("maxTeamSize") as string;
-
         const judgesArray = judgesJson ? JSON.parse(judgesJson) : [];
         const ticketTiersArray = ticketTiersJson ? JSON.parse(ticketTiersJson) : [];
-
         if (!institution) return;
-
         await prisma.event.create({
             data: {
                 title,
@@ -96,13 +83,11 @@ export default async function InstitutionDashboard(props: PageProps) {
                 institutionId: (institution as any).id
             } as any
         });
-
         revalidatePath(`/admin/dashboard/${slug}`);
         revalidatePath(`/institution/${slug}`);
         revalidatePath(`/events`);
         redirect(`/admin/dashboard/${slug}`);
     }
-
     async function updateEvent(formData: FormData) {
         "use server";
         const id = formData.get("eventId") as string;
@@ -125,10 +110,8 @@ export default async function InstitutionDashboard(props: PageProps) {
         const ticketTiersJson = formData.get("ticketTiersJson") as string;
         const minTeamSizeVal = formData.get("minTeamSize") as string;
         const maxTeamSizeVal = formData.get("maxTeamSize") as string;
-
         const judgesArray = judgesJson ? JSON.parse(judgesJson) : [];
         const ticketTiersArray = ticketTiersJson ? JSON.parse(ticketTiersJson) : [];
-
         await prisma.event.update({
             where: { id },
             data: {
@@ -153,13 +136,11 @@ export default async function InstitutionDashboard(props: PageProps) {
                 maxTeamSize: maxTeamSizeVal ? parseInt(maxTeamSizeVal) : 1,
             } as any
         });
-
         revalidatePath(`/admin/dashboard/${slug}`);
         revalidatePath(`/institution/${slug}`);
         revalidatePath(`/events`);
         redirect(`/admin/dashboard/${slug}`);
     }
-
     async function deleteEvent(formData: FormData) {
         "use server";
         const id = formData.get("eventId") as string;
@@ -170,7 +151,6 @@ export default async function InstitutionDashboard(props: PageProps) {
         revalidatePath(`/institution/${slug}`);
         revalidatePath(`/events`);
     }
-
     return (
         <div className="flex min-h-screen bg-gray-50/50">
             <AdminSidebar
@@ -178,7 +158,6 @@ export default async function InstitutionDashboard(props: PageProps) {
                 institutionName={institution.name}
                 logo={institution.logo}
             />
-
             <main className="flex-1 flex flex-col h-screen overflow-y-auto">
                 <header className="bg-white border-b border-gray-100 p-6 flex-shrink-0">
                     <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -193,7 +172,6 @@ export default async function InstitutionDashboard(props: PageProps) {
                                 Admin <span className="text-blue-600">Dashboard.</span>
                             </h1>
                         </div>
-
                         {!eventToEdit && !showCreate && (
                             <Link
                                 href={`/admin/dashboard/${slug}?create=true`}
@@ -204,7 +182,6 @@ export default async function InstitutionDashboard(props: PageProps) {
                         )}
                     </div>
                 </header>
-
                 <div className="p-6 lg:p-8 max-w-6xl mx-auto w-full">
                     {(eventToEdit || showCreate) ? (
                         <div className="max-w-4xl mx-auto">
@@ -216,7 +193,6 @@ export default async function InstitutionDashboard(props: PageProps) {
                                     Close Editor ✕
                                 </Link>
                             </div>
-
                             <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40">
                                 <AdminEventForm
                                     eventToEdit={eventToEdit}
@@ -261,7 +237,6 @@ export default async function InstitutionDashboard(props: PageProps) {
                                     </div>
                                 </div>
                             </div>
-
                             <div className="space-y-6">
                                 <div className="flex items-center justify-between border-b border-gray-100 pb-6">
                                     <h2 className="text-2xl font-normal tracking-tight text-gray-900">Manage Events.</h2>
@@ -270,7 +245,6 @@ export default async function InstitutionDashboard(props: PageProps) {
                                         <button className="px-5 py-2.5 bg-gray-50 border border-gray-100 rounded-full text-[10px] font-black uppercase tracking-widest text-gray-900">Active</button>
                                     </div>
                                 </div>
-
                                 {institution.events.length === 0 ? (
                                     <div className="py-16 text-center bg-white rounded-3xl border border-dashed border-gray-200">
                                         <div className="w-20 h-20 bg-gray-50 rounded-3xl mx-auto mb-6 flex items-center justify-center text-gray-200">
@@ -303,13 +277,11 @@ export default async function InstitutionDashboard(props: PageProps) {
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div className="flex items-center gap-10">
                                                     <div className="text-right hidden sm:block">
                                                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-300">Participation</p>
                                                         <p className="text-lg font-normal text-gray-900">{event._count.registrations} <span className="text-xs text-gray-400">Users</span></p>
                                                     </div>
-
                                                     <div className="flex items-center gap-2">
                                                         <Link
                                                             href={`/events/${event.id}`}
@@ -340,7 +312,6 @@ export default async function InstitutionDashboard(props: PageProps) {
                         </div>
                     )}
                 </div>
-
                 <div className="h-20 flex-shrink-0"></div>
             </main>
         </div>

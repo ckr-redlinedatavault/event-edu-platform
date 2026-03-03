@@ -7,15 +7,12 @@ import { format } from "date-fns";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Link from "next/link";
 import { Calendar, MapPin, Users, Ticket, ShieldCheck, ChevronRight, Clock, Info } from "lucide-react";
-
 export default async function EventDetailPage({
     params,
 }: {
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-
-    // Use raw SQL to bypass Prisma client cache issues
     const events: any[] = await prisma.$queryRawUnsafe(`
         SELECT e.*, 
                i.name as "institutionName", i.slug as "institutionSlug", i.logo as "institutionLogo",
@@ -24,30 +21,21 @@ export default async function EventDetailPage({
         LEFT JOIN "Institution" i ON e."institutionId" = i.id
         WHERE e.id = $1
     `, id);
-
     const event = events[0];
     if (!event) notFound();
-
-    // Reconstruct nested objects for template compatibility
     event.institution = {
         name: event.institutionName,
         slug: event.institutionSlug,
         logo: event.institutionLogo
     };
     event._count = { registrations: event.registrationCount || 0 };
-
-    // Parse JSON fields if they're strings
     if (typeof event.judges === 'string') event.judges = JSON.parse(event.judges);
     if (typeof event.ticketTiers === 'string') event.ticketTiers = JSON.parse(event.ticketTiers);
-
     return (
         <div className="flex flex-col min-h-screen bg-[#FDFDFD] font-sans selection:bg-blue-100 selection:text-blue-900">
             <Navbar />
-
             <main className="flex-grow pt-24 pb-16">
                 <div className="max-w-6xl mx-auto px-6">
-
-                    {/* Navigation Header */}
                     <div className="mb-8">
                         <Breadcrumbs
                             items={[
@@ -56,8 +44,6 @@ export default async function EventDetailPage({
                             ]}
                         />
                     </div>
-
-                    {/* Main Title Section */}
                     <div className="max-w-4xl mb-10">
                         <div className="flex items-center gap-3 mb-6">
                             <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider rounded-full border border-blue-100">
@@ -74,14 +60,8 @@ export default async function EventDetailPage({
                             {event.shortDescription || "Secure your spot for this exclusive institutional experience."}
                         </p>
                     </div>
-
-                    {/* Primary Content Grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-
-                        {/* Left Side: Details & High Banner */}
                         <div className="lg:col-span-8 space-y-10">
-
-                            {/* Banner Image */}
                             <div className="w-full rounded-3xl overflow-hidden border border-slate-100 relative group bg-white shadow-xl shadow-slate-200/50">
                                 {event.banner ? (
                                     <div className="relative w-full overflow-hidden max-h-[600px] flex items-center justify-center">
@@ -100,10 +80,7 @@ export default async function EventDetailPage({
                                     </div>
                                 )}
                             </div>
-
-                            {/* Logistics Overview Cards */}
                             <div className="space-y-4">
-                                {/* Top row: Date, Time, Type */}
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-6 bg-slate-50/50 rounded-3xl border border-slate-100 items-start">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2 text-slate-400">
@@ -127,8 +104,6 @@ export default async function EventDetailPage({
                                         <p className="text-sm font-bold text-slate-900">{event.mode}</p>
                                     </div>
                                 </div>
-
-                                {/* Address Card */}
                                 <div className="p-6 bg-white rounded-3xl border border-slate-100 shadow-sm flex items-start gap-4">
                                     <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 shrink-0">
                                         <MapPin size={18} strokeWidth={2} />
@@ -147,10 +122,7 @@ export default async function EventDetailPage({
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Detailed Information */}
                             <div className="space-y-12">
-                                {/* Description section */}
                                 <section className="space-y-6">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
@@ -162,8 +134,6 @@ export default async function EventDetailPage({
                                         {event.fullDescription}
                                     </div>
                                 </section>
-
-                                {/* Judges/Mentors section */}
                                 {event.judges && (event.judges as any[]).length > 0 && (
                                     <section className="space-y-8 pt-8 border-t border-slate-50">
                                         <div className="flex items-center gap-3">
@@ -189,8 +159,6 @@ export default async function EventDetailPage({
                                         </div>
                                     </section>
                                 )}
-
-                                {/* Tickets selection section */}
                                 <section className="space-y-8 pt-8 border-t border-slate-50">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
@@ -198,7 +166,6 @@ export default async function EventDetailPage({
                                         </div>
                                         <h2 className="text-sm font-black uppercase tracking-widest text-slate-800">Ticket Categories</h2>
                                     </div>
-
                                     <div className="space-y-3 pl-11">
                                         {event.ticketTiers && (event.ticketTiers as any[]).length > 0 ? (
                                             (event.ticketTiers as any[]).map((tier: any, i: number) => (
@@ -239,8 +206,6 @@ export default async function EventDetailPage({
                                 </section>
                             </div>
                         </div>
-
-                        {/* Right Side: Sidebar */}
                         <div className="lg:col-span-4 space-y-6">
                             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm sticky top-24 space-y-6 text-left">
                                 <div className="space-y-2">
@@ -260,7 +225,6 @@ export default async function EventDetailPage({
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="space-y-3">
                                     <Link href={`/events/${event.id}/register`} className="block w-full">
                                         <button className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 active:scale-95 transition-all">
@@ -271,7 +235,6 @@ export default async function EventDetailPage({
                                         Ends: {event.registrationDeadline ? format(new Date(event.registrationDeadline), 'MMM dd') : "Until Capacity"}
                                     </p>
                                 </div>
-
                                 <div className="pt-6 border-t border-slate-50 space-y-4 text-left">
                                     <p className="text-[10px] font-bold uppercase text-slate-400">Hosted by</p>
                                     <div className="flex items-center gap-4">
@@ -284,8 +247,6 @@ export default async function EventDetailPage({
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* QR Note */}
                                 {event.qrEnabled && (
                                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3">
                                         <div className="p-2 bg-white rounded-lg border border-slate-100">
@@ -299,11 +260,9 @@ export default async function EventDetailPage({
                                 )}
                             </div>
                         </div>
-
                     </div>
                 </div>
             </main>
-
             <Footer />
             <BottomBar />
         </div>

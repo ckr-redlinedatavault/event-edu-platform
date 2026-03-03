@@ -7,112 +7,80 @@ import { revalidatePath } from "next/cache";
 import { User, Mail, Phone, ArrowLeft, ShieldCheck, QrCode } from "lucide-react";
 import Link from "next/link";
 import { headers } from "next/headers";
-
 export default async function EventRegistrationPage({
     params,
 }: {
     params: Promise<{ id: string }>;
 }) {
     const { id } = await params;
-
     const event = await prisma.event.findUnique({
         where: { id },
     }) as any;
-
     if (!event) notFound();
-
     async function registerUser(formData: FormData) {
         "use server";
         const fullName = formData.get("fullName") as string;
         const email = formData.get("email") as string;
         const phone = formData.get("phone") as string;
-
         if (!fullName || !email) return;
-
         try {
-            // 1. Find or create user (as student) using raw SQL to bypass Prisma client cache issues
             const userResult: any[] = await prisma.$queryRawUnsafe(`
                 INSERT INTO "User" (id, email, role, "createdAt")
                 VALUES (gen_random_uuid(), $1, 'STUDENT', NOW())
                 ON CONFLICT (email) DO UPDATE SET email = EXCLUDED.email
                 RETURNING *
             `, email);
-
             const user = userResult[0];
-
-            // 2. Create Registration with Tier using raw SQL
             const tier = formData.get("tier") as string || "Standard";
-
             const regResult: any[] = await prisma.$queryRawUnsafe(`
                 INSERT INTO "Registration" (id, "userId", "eventId", "createdAt")
                 VALUES (gen_random_uuid(), $1, $2, NOW())
                 ON CONFLICT ("userId", "eventId") DO UPDATE SET "userId" = EXCLUDED."userId"
                 RETURNING *
             `, user.id, id);
-
             const registration = regResult[0];
-
-            // 3. Create Ticket if doesn't exist
             const existingTicket = await prisma.ticket.findUnique({
                 where: { registrationId: registration.id }
             });
-
             if (!existingTicket) {
-                // Get host for absolute URL in QR code
                 const host = (await headers()).get("host") || "localhost:3000";
                 const protocol = host.includes("localhost") ? "http" : "https";
-
-                // Create ticket with a stable ID first
                 const tempTicket = await prisma.ticket.create({
                     data: {
                         registrationId: registration.id,
-                        qrCode: "temp", // temporarily set
+                        qrCode: "temp", 
                         isUsed: false
                     }
                 });
-
-                // Update with full verification URL
                 const qrCodeData = `${protocol}://${host}/verify/ticket/${tempTicket.id}`;
-
                 await prisma.ticket.update({
                     where: { id: tempTicket.id },
                     data: { qrCode: qrCodeData }
                 });
             }
-
             revalidatePath(`/events/${id}`);
-
-            // Redirect to success page - using the real name parameter
             redirect(`/events/${id}/success?email=${email}&name=${encodeURIComponent(fullName)}`);
-
         } catch (error) {
             console.error("Registration error:", error);
-            // In case of redirect error (which is standard behavior in server components)
             if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) throw error;
             return;
         }
     }
-
     return (
         <div className="flex flex-col min-h-screen bg-[#FDFDFD]">
             <Navbar />
-
             <main className="flex-grow pt-28 pb-20">
                 <div className="max-w-4xl mx-auto px-6">
-
                     <Link href={`/events/${id}`} className="inline-flex items-center gap-2 text-slate-400 hover:text-blue-600 transition-colors mb-8 group">
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                         <span className="text-[10px] font-black uppercase tracking-widest">Back to Event Details</span>
                     </Link>
-
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
-
                         <div className="lg:col-span-3 space-y-10">
                             <div className="space-y-2">
                                 <h1 className="text-3xl font-black text-slate-900 tracking-tight">Register for Event.</h1>
                                 <p className="text-slate-500 text-sm">Secure your spot and receive your digital QR ticket instantly.</p>
                             </div>
-
                             <form action={registerUser} className="space-y-6">
                                 <div className="space-y-4">
                                     <div className="space-y-2">
@@ -127,7 +95,6 @@ export default async function EventRegistrationPage({
                                             />
                                         </div>
                                     </div>
-
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Email Address</label>
                                         <div className="relative">
@@ -141,7 +108,6 @@ export default async function EventRegistrationPage({
                                             />
                                         </div>
                                     </div>
-
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Phone Number</label>
                                         <div className="relative">
@@ -188,7 +154,6 @@ export default async function EventRegistrationPage({
                                         </div>
                                     </div>
                                 </div>
-
                                 <button
                                     type="submit"
                                     className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black text-sm shadow-xl shadow-blue-500/20 hover:bg-blue-700 hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-3 mt-8"
@@ -198,7 +163,6 @@ export default async function EventRegistrationPage({
                                 </button>
                             </form>
                         </div>
-
                         <div className="lg:col-span-2">
                             <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 space-y-6 sticky top-28">
                                 <div className="space-y-4">
@@ -212,11 +176,9 @@ export default async function EventRegistrationPage({
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </main>
-
             <Footer />
             <BottomBar />
         </div>

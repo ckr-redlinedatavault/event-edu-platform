@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BottomBar from "@/components/BottomBar";
 import { format } from "date-fns";
-
 export default async function LiveEventsPage({
     searchParams,
 }: {
@@ -13,8 +12,6 @@ export default async function LiveEventsPage({
     const { q, category } = await searchParams;
     const query = typeof q === 'string' ? q : "";
     const selectedCategory = typeof category === 'string' ? category : "All Events";
-
-    // Build raw SQL with filters
     let sqlQuery = `
         SELECT e.*, 
                i.name as "institutionName", i.slug as "institutionSlug", i.logo as "institutionLogo",
@@ -25,24 +22,18 @@ export default async function LiveEventsPage({
     `;
     const params: any[] = [];
     let paramIndex = 1;
-
     if (query) {
         sqlQuery += ` AND (e.title ILIKE $${paramIndex} OR e.location ILIKE $${paramIndex} OR i.name ILIKE $${paramIndex})`;
         params.push(`%${query}%`);
         paramIndex++;
     }
-
     if (selectedCategory !== "All Events") {
         sqlQuery += ` AND LOWER(e.category) = LOWER($${paramIndex})`;
         params.push(selectedCategory);
         paramIndex++;
     }
-
     sqlQuery += ` ORDER BY e."startDate" ASC`;
-
     const rawEvents: any[] = await prisma.$queryRawUnsafe(sqlQuery, ...params);
-
-    // Map to template-compatible shape
     const events = rawEvents.map((e: any) => ({
         ...e,
         institution: { name: e.institutionName, slug: e.institutionSlug, logo: e.institutionLogo },
@@ -50,15 +41,11 @@ export default async function LiveEventsPage({
         judges: typeof e.judges === 'string' ? JSON.parse(e.judges) : e.judges,
         ticketTiers: typeof e.ticketTiers === 'string' ? JSON.parse(e.ticketTiers) : e.ticketTiers
     }));
-
     return (
         <div className="flex flex-col min-h-screen bg-white">
             <Navbar />
-
             <main className="flex-grow pt-24 pb-16">
                 <div className="max-w-6xl mx-auto px-6">
-
-                    {/* Header & Filter Section */}
                     <div className="flex flex-col items-start gap-8 mb-12">
                         <div className="space-y-4">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-[10px] uppercase tracking-widest font-bold">
@@ -71,8 +58,6 @@ export default async function LiveEventsPage({
                                 Explore academic, cultural, and professional events across our network.
                             </p>
                         </div>
-
-                        {/* Simple Search Filter */}
                         <form action="/events" method="GET" className="relative w-full max-w-md group">
                             {selectedCategory !== "All Events" && (
                                 <input type="hidden" name="category" value={selectedCategory} />
@@ -90,8 +75,6 @@ export default async function LiveEventsPage({
                             </svg>
                         </form>
                     </div>
-
-                    {/* Category Filter Tags */}
                     <div className="flex flex-wrap gap-2 mb-12">
                         {['All Events', 'Workshops', 'Conferences', 'Cultural', 'Sports', 'Technical'].map((tag: string) => (
                             <Link
@@ -106,8 +89,6 @@ export default async function LiveEventsPage({
                             </Link>
                         ))}
                     </div>
-
-                    {/* Events Grid */}
                     {events.length === 0 ? (
                         <div className="text-center py-24 bg-gray-50/50 rounded-3xl border border-dashed border-gray-200">
                             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-gray-100">
@@ -138,7 +119,6 @@ export default async function LiveEventsPage({
                                         ) : (
                                             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-indigo-600/5"></div>
                                         )}
-
                                         {/* Date Badge */}
                                         <div className="absolute top-4 left-4 bg-white p-2.5 rounded-xl shadow-lg shadow-black/5 text-center min-w-[48px] border border-gray-50">
                                             <span className="block text-[8px] uppercase font-bold tracking-widest text-gray-400 leading-none mb-1">
@@ -148,8 +128,6 @@ export default async function LiveEventsPage({
                                                 {format(new Date(event.startDate), 'dd')}
                                             </span>
                                         </div>
-
-                                        {/* Institution Overchip */}
                                         <div className="absolute bottom-6 left-6 right-6">
                                             <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 inline-flex items-center gap-2 shadow-sm">
                                                 <div className="w-5 h-5 bg-blue-600 rounded-lg flex items-center justify-center text-[10px] text-white font-black">
@@ -161,8 +139,6 @@ export default async function LiveEventsPage({
                                             </div>
                                         </div>
                                     </div>
-
-                                    {/* Content */}
                                     <div className="p-6 flex flex-col flex-grow">
                                         <h2 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors tracking-tight leading-tight line-clamp-1">
                                             {event.title}
@@ -170,7 +146,6 @@ export default async function LiveEventsPage({
                                         <p className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-6 flex-grow">
                                             {event.fullDescription}
                                         </p>
-
                                         <div className="flex items-center justify-between pt-6 border-t border-gray-50">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex -space-x-2">
@@ -198,7 +173,6 @@ export default async function LiveEventsPage({
                     )}
                 </div>
             </main>
-
             <Footer />
             <BottomBar />
         </div>

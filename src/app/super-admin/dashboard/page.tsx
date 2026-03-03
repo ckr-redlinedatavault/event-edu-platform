@@ -5,22 +5,18 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { format } from "date-fns";
 import Breadcrumbs from "@/components/Breadcrumbs";
-
 export default async function SuperAdminDashboard() {
     const cookieStore = await cookies();
     const session = cookieStore.get("super_admin_session");
-
     if (!session || session.value !== "authenticated") {
         redirect("/super-admin/login");
     }
-
     const institutions = await prisma.institution.findMany({
         include: {
             _count: { select: { events: true, admins: true } }
         },
         orderBy: { createdAt: "desc" }
     });
-
     const events = await prisma.event.findMany({
         include: {
             institution: true,
@@ -28,12 +24,10 @@ export default async function SuperAdminDashboard() {
         },
         orderBy: { startDate: "desc" }
     });
-
     async function deleteInstitution(institutionId: string) {
         "use server";
         const institutionEvents = await prisma.event.findMany({ where: { institutionId }, select: { id: true } });
         const eventIds = institutionEvents.map((e: { id: string }) => e.id);
-
         await prisma.ticket.deleteMany({ where: { registration: { eventId: { in: eventIds } } } });
         await prisma.registration.deleteMany({ where: { eventId: { in: eventIds } } });
         await prisma.event.deleteMany({ where: { institutionId } });
@@ -41,7 +35,6 @@ export default async function SuperAdminDashboard() {
         await prisma.institution.delete({ where: { id: institutionId } });
         revalidatePath("/super-admin/dashboard");
     }
-
     async function deleteEvent(eventId: string) {
         "use server";
         await prisma.ticket.deleteMany({ where: { registration: { eventId } } });
@@ -49,7 +42,6 @@ export default async function SuperAdminDashboard() {
         await prisma.event.delete({ where: { id: eventId } });
         revalidatePath("/super-admin/dashboard");
     }
-
     async function clearAllEvents() {
         "use server";
         await prisma.ticket.deleteMany({});
@@ -57,17 +49,14 @@ export default async function SuperAdminDashboard() {
         await prisma.event.deleteMany({});
         revalidatePath("/super-admin/dashboard");
     }
-
     async function logout() {
         "use server";
         const cookieStore = await cookies();
         cookieStore.delete("super_admin_session");
         redirect("/super-admin/login");
     }
-
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-            {/* Super Admin Header */}
             <header className="bg-slate-900 border-b border-slate-800 p-8 sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <div className="flex items-center gap-6">
@@ -86,7 +75,6 @@ export default async function SuperAdminDashboard() {
                     </form>
                 </div>
             </header>
-
             <main className="max-w-7xl mx-auto w-full px-6 py-12 space-y-16">
                 <Breadcrumbs
                     items={[
@@ -94,8 +82,6 @@ export default async function SuperAdminDashboard() {
                         { label: "Dashboard", href: "/super-admin/dashboard", active: true }
                     ]}
                 />
-
-                {/* Statistics Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div className="bg-white p-8 rounded-[2rem] border border-slate-200">
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Total Institutions</p>
@@ -120,16 +106,12 @@ export default async function SuperAdminDashboard() {
                         </form>
                     </div>
                 </div>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-                    {/* Institution Module */}
                     <div className="space-y-8">
                         <div className="flex items-center justify-between border-b border-slate-200 pb-6">
                             <h2 className="text-2xl font-normal text-slate-900 tracking-tight">Institutions Feed.</h2>
                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{institutions.length} Registered</span>
                         </div>
-
                         <div className="space-y-4">
                             {institutions.map((inst: any) => (
                                 <div key={inst.id} className="p-6 bg-white rounded-[2.5rem] border border-slate-100 flex items-center justify-between gap-6">
@@ -154,14 +136,11 @@ export default async function SuperAdminDashboard() {
                             ))}
                         </div>
                     </div>
-
-                    {/* Global Events Module */}
                     <div className="space-y-8">
                         <div className="flex items-center justify-between border-b border-slate-200 pb-6">
                             <h2 className="text-2xl font-normal text-slate-900 tracking-tight">Global Events Feed.</h2>
                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{events.length} Deployed</span>
                         </div>
-
                         <div className="space-y-4">
                             {events.map((event: any) => (
                                 <div key={event.id} className="p-6 bg-white rounded-[2.5rem] border border-slate-100 flex items-center justify-between gap-6">
@@ -185,7 +164,6 @@ export default async function SuperAdminDashboard() {
                             ))}
                         </div>
                     </div>
-
                 </div>
             </main>
         </div>

@@ -1,25 +1,20 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { Plus, Trash2, X, User, Image as ImageIcon, Tag, IndianRupee } from "lucide-react";
-
 interface Judge {
     name: string;
     image: string;
 }
-
 interface TicketTier {
     name: string;
     price: number;
 }
-
 interface EventFormProps {
     eventToEdit?: any;
     institutionSlug: string;
     onSubmit: (formData: FormData) => Promise<void>;
 }
-
 export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit }: EventFormProps) {
     const [judges, setJudges] = useState<Judge[]>(
         eventToEdit?.judges ? (eventToEdit.judges as any[]) : []
@@ -27,41 +22,33 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
     const [ticketTiers, setTicketTiers] = useState<TicketTier[]>(
         eventToEdit?.ticketTiers ? (eventToEdit.ticketTiers as any[]) : []
     );
-
     const addJudge = () => {
         if (judges.length < 10) {
             setJudges([...judges, { name: "", image: "" }]);
         }
     };
-
     const removeJudge = (index: number) => {
         setJudges(judges.filter((_, i) => i !== index));
     };
-
     const updateJudge = (index: number, field: keyof Judge, value: string) => {
         const newJudges = [...judges];
         newJudges[index][field] = value;
         setJudges(newJudges);
     };
-
     const addTicketTier = () => {
         setTicketTiers([...ticketTiers, { name: "", price: 0 }]);
     };
-
     const removeTicketTier = (index: number) => {
         setTicketTiers(ticketTiers.filter((_, i) => i !== index));
     };
-
     const updateTicketTier = (index: number, field: keyof TicketTier, value: any) => {
         const newTiers = [...ticketTiers];
         (newTiers[index] as any)[field] = field === 'price' ? parseFloat(value) || 0 : value;
         setTicketTiers(newTiers);
     };
-
     return (
         <form
             action={async (formData) => {
-                // Add the JSON arrays to the form data
                 formData.append("judgesJson", JSON.stringify(judges));
                 formData.append("ticketTiersJson", JSON.stringify(ticketTiers));
                 await onSubmit(formData);
@@ -69,7 +56,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
             className="space-y-8"
         >
             {eventToEdit && <input type="hidden" name="eventId" value={eventToEdit.id} />}
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-6">
                     <div className="space-y-2">
@@ -85,7 +71,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                         <input name="category" defaultValue={eventToEdit?.category || ''} placeholder="Ex: Hackathon, Seminar" className="w-full bg-gray-50 border border-transparent rounded-2xl p-4 text-sm focus:outline-none focus:bg-white focus:border-blue-500/20 transition-all" />
                     </div>
                 </div>
-
                 <div className="space-y-6">
                     <div className="space-y-2">
                         <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Venue / Location</label>
@@ -103,7 +88,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                     </div>
                 </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-50">
                 <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Start Date</label>
@@ -118,7 +102,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                     <input name="registrationDeadline" type="datetime-local" defaultValue={eventToEdit?.registrationDeadline ? new Date(eventToEdit.registrationDeadline).toISOString().slice(0, 16) : ''} className="w-full bg-gray-50 border border-transparent rounded-2xl p-4 text-sm focus:outline-none focus:bg-white focus:border-blue-500/20 transition-all" />
                 </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Mode</label>
@@ -146,18 +129,14 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                     </select>
                 </div>
             </div>
-
             <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Banner URL</label>
                 <input name="banner" defaultValue={eventToEdit?.banner || ''} placeholder="https://..." className="w-full bg-gray-50 border border-transparent rounded-2xl p-4 text-sm focus:outline-none focus:bg-white focus:border-blue-500/20 transition-all" />
             </div>
-
             <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Detailed Description</label>
                 <textarea name="fullDescription" rows={4} required defaultValue={eventToEdit?.fullDescription} placeholder="Event agenda, requirements, etc." className="w-full bg-gray-50 border border-transparent rounded-2xl p-4 text-sm focus:outline-none focus:bg-white focus:border-blue-500/20 transition-all resize-none"></textarea>
             </div>
-
-            {/* Dynamic Judges Section */}
             <div className="space-y-4 pt-6 border-t border-gray-100">
                 <div className="flex items-center justify-between">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Judges & Experts (Max 10)</label>
@@ -169,7 +148,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                         <Plus size={12} /> Add Judge
                     </button>
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {judges.map((judge, index) => (
                         <div key={index} className="p-4 bg-white rounded-2xl border border-gray-100 space-y-3 relative group shadow-sm hover:shadow-md transition-all">
@@ -202,8 +180,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                     ))}
                 </div>
             </div>
-
-            {/* Dynamic Ticket Tiers Section */}
             <div className="space-y-4 pt-6 border-t border-gray-100">
                 <div className="flex items-center justify-between">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Ticket Categories</label>
@@ -215,7 +191,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                         <Plus size={12} /> Add Tier
                     </button>
                 </div>
-
                 <div className="space-y-3">
                     {ticketTiers.map((tier, index) => (
                         <div key={index} className="flex items-center gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
@@ -249,7 +224,6 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                     ))}
                 </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-50">
                 <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Min. Team Size</label>
@@ -260,12 +234,10 @@ export default function AdminEventForm({ eventToEdit, institutionSlug, onSubmit 
                     <input name="maxTeamSize" type="number" defaultValue={eventToEdit?.maxTeamSize || 1} className="w-full bg-gray-50 border border-transparent rounded-2xl p-4 text-sm focus:outline-none focus:bg-white focus:border-blue-500/20 transition-all" />
                 </div>
             </div>
-
             <div className="flex items-center gap-4 bg-gray-50 p-6 rounded-3xl border border-gray-100/50">
                 <input type="checkbox" name="qrEnabled" id="qrEnabled" defaultChecked={eventToEdit ? eventToEdit.qrEnabled : true} className="w-5 h-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500" />
                 <label htmlFor="qrEnabled" className="text-sm font-medium text-gray-700">Digital QR Ticketing Active</label>
             </div>
-
             <div className="flex gap-4 pt-4">
                 <Link href={`/admin/dashboard/${institutionSlug}`} className="flex-1 py-5 bg-gray-100 text-gray-600 rounded-full font-bold text-sm text-center active:scale-95 transition-all">
                     Discard Changes

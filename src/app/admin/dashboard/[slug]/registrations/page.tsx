@@ -4,22 +4,16 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import AdminSidebar from "@/components/AdminSidebar";
 import { format } from "date-fns";
 import { UserCheck, ShieldCheck, Mail, Ticket } from "lucide-react";
-
 interface Props {
     params: Promise<{ slug: string }>;
 }
-
 export default async function AdminRegistrationsPage({ params }: Props) {
     const { slug } = await params;
-
     const institutions: any[] = await prisma.$queryRawUnsafe(`
         SELECT * FROM "Institution" WHERE slug = $1
     `, slug);
-
     if (!institutions || institutions.length === 0) notFound();
     const institution = institutions[0];
-
-    // Fetch all registrations across all events for this institution
     const allRegistrations: any[] = await prisma.$queryRawUnsafe(`
         SELECT r.id, r."userId", r."eventId", r."createdAt",
                u.email as "userEmail",
@@ -32,8 +26,6 @@ export default async function AdminRegistrationsPage({ params }: Props) {
         WHERE e."institutionId" = $1
         ORDER BY r."createdAt" DESC
     `, institution.id);
-
-    // Map to template-compatible shape
     const registrations = allRegistrations.map((reg: any) => ({
         id: reg.id,
         userId: reg.userId,
@@ -43,7 +35,6 @@ export default async function AdminRegistrationsPage({ params }: Props) {
         user: { email: reg.userEmail },
         ticket: reg.ticketId ? { id: reg.ticketId, qrCode: reg.qrCode, isUsed: reg.isUsed } : null
     }));
-
     return (
         <div className="flex min-h-screen bg-gray-50/50">
             <AdminSidebar
@@ -51,7 +42,6 @@ export default async function AdminRegistrationsPage({ params }: Props) {
                 institutionName={institution.name}
                 logo={institution.logo}
             />
-
             <main className="flex-1 flex flex-col h-screen overflow-y-auto">
                 <header className="bg-white border-b border-gray-100 p-6 flex-shrink-0">
                     <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -68,7 +58,6 @@ export default async function AdminRegistrationsPage({ params }: Props) {
                         </div>
                     </div>
                 </header>
-
                 <div className="p-6 lg:p-8 max-w-6xl mx-auto w-full">
                     {registrations.length === 0 ? (
                         <div className="py-32 text-center bg-white rounded-[3rem] border border-gray-100 shadow-sm">

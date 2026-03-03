@@ -6,7 +6,6 @@ import bcrypt from "bcryptjs";
 import Navbar from "@/components/Navbar";
 import BottomBar from "@/components/BottomBar";
 import Footer from "@/components/Footer";
-
 export default async function InstitutionRegisterPage() {
     async function registerInstitution(formData: FormData) {
         "use server";
@@ -16,28 +15,19 @@ export default async function InstitutionRegisterPage() {
         const logo = formData.get("logo") as string;
         const password = formData.get("password") as string;
         const description = formData.get("description") as string;
-
         if (!name || !slug || !email || !password) return;
-
         try {
             const hashedPassword = await bcrypt.hash(password, 10);
-
-            // 0. Check for existing slug
             const existing = await prisma.institution.findUnique({
                 where: { slug }
             });
-
             if (existing) {
                 console.error("Slug already taken");
                 return;
             }
-
-            // 1. Create Institution
             const inst = await prisma.institution.create({
                 data: { name, slug, description, logo },
             });
-
-            // 2. Create Admin User linked to this institution
             await prisma.user.create({
                 data: {
                     email,
@@ -46,24 +36,18 @@ export default async function InstitutionRegisterPage() {
                     institutionId: inst.id
                 }
             });
-
             revalidatePath("/");
         } catch (error) {
             console.error("Failed to register institution:", error);
             return;
         }
-
         redirect(`/institution/${slug}`);
     }
-
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <Navbar />
-
             <main className="flex-grow pt-24">
                 <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 py-12">
-
-                    {/* Left: Registration Form */}
                     <div className="space-y-12">
                         <div className="space-y-4">
                             <h1 className="text-4xl md:text-5xl tracking-tight text-gray-900 font-normal leading-tight">
@@ -73,7 +57,6 @@ export default async function InstitutionRegisterPage() {
                                 Launch your official digital event infrastructure in less than two minutes.
                             </p>
                         </div>
-
                         <form action={registerInstitution} className="space-y-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
@@ -95,7 +78,6 @@ export default async function InstitutionRegisterPage() {
                                     />
                                 </div>
                             </div>
-
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Admin Email</label>
                                 <input
@@ -107,7 +89,6 @@ export default async function InstitutionRegisterPage() {
                                 />
                                 <p className="text-[10px] text-gray-400">This email will have full administrative access.</p>
                             </div>
-
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Secure Password</label>
                                 <input
@@ -118,7 +99,6 @@ export default async function InstitutionRegisterPage() {
                                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm focus:outline-none focus:border-blue-500/30 focus:ring-4 focus:ring-blue-500/5 transition-all placeholder:text-gray-400"
                                 />
                             </div>
-
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Institution Logo URL</label>
                                 <input
@@ -127,7 +107,6 @@ export default async function InstitutionRegisterPage() {
                                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm focus:outline-none focus:border-blue-500/30 focus:ring-4 focus:ring-blue-500/5 transition-all font-mono text-xs"
                                 />
                             </div>
-
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Short Description</label>
                                 <textarea
@@ -137,7 +116,6 @@ export default async function InstitutionRegisterPage() {
                                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl p-4 text-sm focus:outline-none focus:border-blue-500/30 focus:ring-4 focus:ring-blue-500/5 transition-all resize-none"
                                 ></textarea>
                             </div>
-
                             <button
                                 type="submit"
                                 className="w-full py-5 bg-blue-600 text-white rounded-full font-medium text-lg hover:bg-blue-700 shadow-xl shadow-blue-500/20 active:scale-[0.98] transition-all"
@@ -146,13 +124,10 @@ export default async function InstitutionRegisterPage() {
                             </button>
                         </form>
                     </div>
-
-                    {/* Right: Feature Highlights */}
                     <div className="bg-gray-50 rounded-[2.5rem] p-10 lg:p-12 flex flex-col justify-center space-y-10">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 border border-blue-200 text-blue-600 text-[10px] uppercase tracking-widest font-bold w-fit">
                             Onboarding Benefits
                         </div>
-
                         <div className="grid gap-8">
                             {[
                                 {
@@ -211,7 +186,6 @@ export default async function InstitutionRegisterPage() {
                                 </div>
                             ))}
                         </div>
-
                         <div className="pt-6 border-t border-gray-200 mt-auto">
                             <p className="text-[9px] text-gray-400 uppercase tracking-widest font-bold mb-3">Trusted by Institutions Worldwide</p>
                             <div className="flex gap-6 grayscale opacity-40">
@@ -221,10 +195,8 @@ export default async function InstitutionRegisterPage() {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </main>
-
             <Footer />
             <BottomBar />
         </div>
