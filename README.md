@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EventEdu Platform
 
-## Getting Started
+A high-performance, institutional event management infrastructure designed for scalability and seamless student engagement.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 🛠 Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   **Framework:** [Next.js 16](https://nextjs.org/) (App Router + Turbopack)
+*   **Frontend:** [React 19](https://react.dev/) / [Tailwind CSS 4](https://tailwindcss.com/)
+*   **Database:** [Supabase](https://supabase.com/) (PostgreSQL)
+*   **ORM:** [Prisma](https://www.prisma.io/)
+*   **Icons:** [Lucide React](https://lucide.dev/)
+*   **Motion:** [Lenis](https://lenis.darkroom.engineering/) (Smooth Scroll)
+*   **Security:** [Bcrypt.js](https://www.npmjs.com/package/bcryptjs)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🚀 Core Modules
 
-## Learn More
+*   **Super Admin GCHQ:** Global system oversight, institution management, and platform-wide analytics.
+*   **Institutional Control:** Dedicated dashboards for college administrators to deploy events and manage registries.
+*   **Smart Ticketing:** Automated QR code generation and PDF ticket delivery for participants.
+*   **Dynamic Discovery:** Automated event feeds and institutional public showcases.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### ⚙️ Development Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Environmental Configuration**
+   ```bash
+   # Create a .env file with the following:
+   DATABASE_URL="your_postgresql_url"
+   DIRECT_URL="your_direct_postgresql_url"
+   SUPER_ADMIN_EMAIL="admin@platform.com"
+   SUPER_ADMIN_PASSWORD="secure_master_key"
+   ```
 
-## Deploy on Vercel
+2. **Installation**
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Database Synchronization**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Runtime**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+### 📡 Deployment
+
+Optimized for **Vercel** with integrated Prisma generation in the build pipeline. All schema changes are automatically synchronized using the pre-build `prisma generate` hook.
+
+---
+
+<div align="center">
+  <p>Built for the next generation of academic ecosystems.</p>
+</div>
