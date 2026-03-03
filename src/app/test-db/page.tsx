@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { Role } from "@prisma/client";
 export const dynamic = "force-dynamic";
 
 export default async function TestDBPage() {
@@ -14,7 +13,7 @@ export default async function TestDBPage() {
     async function addUser(formData: FormData) {
         "use server";
         const email = formData.get("email") as string;
-        const role = formData.get("role") as Role;
+        const role = formData.get("role") as string;
         const institutionId = formData.get("institutionId") as string;
 
         if (!email || !role) return;
@@ -23,7 +22,7 @@ export default async function TestDBPage() {
             await prisma.user.create({
                 data: {
                     email,
-                    role,
+                    role: role as any,
                     institutionId: institutionId || null
                 },
             });
@@ -108,9 +107,9 @@ export default async function TestDBPage() {
                                     className="w-full p-2 rounded-lg border border-zinc-300 dark:bg-black dark:border-zinc-700 font-mono text-sm"
                                     required
                                 >
-                                    <option value={Role.STUDENT}>STUDENT</option>
-                                    <option value={Role.ADMIN}>ADMIN</option>
-                                    <option value={Role.SUPER_ADMIN}>SUPER_ADMIN</option>
+                                    <option value="STUDENT">STUDENT</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="SUPER_ADMIN">SUPER_ADMIN</option>
                                 </select>
                             </div>
                             <div>
