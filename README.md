@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./public/logo.png" alt="EventEdu Logo" width="200" />
+  <img src="public/logo.png" alt="EventEdu Logo" width="200" />
 </div>
 
 # EventEdu Platform
