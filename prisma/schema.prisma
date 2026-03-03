@@ -1,0 +1,90 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  STUDENT
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String?
+  phone         String?
+  password      String?
+  role          Role           @default(STUDENT)
+  institutionId String?
+  institution   Institution?   @relation(fields: [institutionId], references: [id])
+  registrations Registration[]
+  createdAt     DateTime       @default(now())
+}
+
+model Institution {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logo        String?
+  admins      User[]
+  events      Event[]
+  createdAt   DateTime @default(now())
+}
+
+model Event {
+  id                   String         @id @default(uuid())
+  title                String
+  shortDescription     String?
+  fullDescription      String
+  category             String?
+  startDate            DateTime
+  endDate              DateTime?
+  registrationDeadline DateTime?
+  mode                 String         @default("OFFLINE")
+  location             String
+  maxParticipants      Int?
+  fee                  Float          @default(0)
+  banner               String?
+  visibility           String         @default("PUBLIC")
+  status               String         @default("DRAFT")
+  qrEnabled            Boolean        @default(true)
+  judges               Json?          @default("[]")
+  ticketTiers          Json?          @default("[]")
+  minTeamSize          Int?           @default(1)
+  maxTeamSize          Int?           @default(1)
+  institutionId        String
+  institution          Institution    @relation(fields: [institutionId], references: [id])
+  registrations        Registration[]
+  createdAt            DateTime       @default(now())
+
+  @@index([institutionId])
+  @@index([startDate])
+}
+
+model Registration {
+  id        String   @id @default(uuid())
+  userId    String
+  eventId   String
+  tier      String?  @default("Standard")
+  ticket    Ticket?
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, eventId])
+}
+
+model Ticket {
+  id             String       @id @default(uuid())
+  registrationId String       @unique
+  qrCode         String
+  isUsed         Boolean      @default(false)
+  registration   Registration @relation(fields: [registrationId], references: [id])
+  createdAt      DateTime     @default(now())
+}
