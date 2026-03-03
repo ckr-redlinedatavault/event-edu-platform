@@ -4,7 +4,7 @@ A high-performance, institutional event management infrastructure designed for s
 
 ---
 
-### 🛠 Tech Stack
+### Tech Stack
 
 *   **Framework:** [Next.js 16](https://nextjs.org/) (App Router + Turbopack)
 *   **Frontend:** [React 19](https://react.dev/) / [Tailwind CSS 4](https://tailwindcss.com/)
@@ -16,7 +16,7 @@ A high-performance, institutional event management infrastructure designed for s
 
 ---
 
-### 🚀 Core Modules
+### Core Modules
 
 *   **Super Admin GCHQ:** Global system oversight, institution management, and platform-wide analytics.
 *   **Institutional Control:** Dedicated dashboards for college administrators to deploy events and manage registries.
@@ -25,7 +25,7 @@ A high-performance, institutional event management infrastructure designed for s
 
 ---
 
-### ⚙️ Development Setup
+### Development Setup
 
 1. **Environmental Configuration**
    ```bash
@@ -54,7 +54,7 @@ A high-performance, institutional event management infrastructure designed for s
 
 ---
 
-### 📡 Deployment
+### Deployment
 
 Optimized for **Vercel** with integrated Prisma generation in the build pipeline. All schema changes are automatically synchronized using the pre-build `prisma generate` hook.
 
