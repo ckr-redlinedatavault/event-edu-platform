@@ -199,7 +199,7 @@ export default async function InstitutionRegisterPage() {
                                         </svg>
                                     )
                                 }
-                            ].map((point, idx) => (
+                            ].map((point: any, idx: number) => (
                                 <div key={idx} className="flex gap-5 group">
                                     <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm border border-gray-100 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
                                         {point.icon}

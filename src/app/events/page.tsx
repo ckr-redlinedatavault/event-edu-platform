@@ -43,7 +43,7 @@ export default async function LiveEventsPage({
     const rawEvents: any[] = await prisma.$queryRawUnsafe(sqlQuery, ...params);
 
     // Map to template-compatible shape
-    const events = rawEvents.map(e => ({
+    const events = rawEvents.map((e: any) => ({
         ...e,
         institution: { name: e.institutionName, slug: e.institutionSlug, logo: e.institutionLogo },
         _count: { registrations: e.registrationCount || 0 },
@@ -93,7 +93,7 @@ export default async function LiveEventsPage({
 
                     {/* Category Filter Tags */}
                     <div className="flex flex-wrap gap-2 mb-12">
-                        {['All Events', 'Workshops', 'Conferences', 'Cultural', 'Sports', 'Technical'].map((tag) => (
+                        {['All Events', 'Workshops', 'Conferences', 'Cultural', 'Sports', 'Technical'].map((tag: string) => (
                             <Link
                                 key={tag}
                                 href={tag === 'All Events' ? '/events' : `/events?category=${tag}${query ? `&q=${query}` : ''}`}
@@ -174,7 +174,7 @@ export default async function LiveEventsPage({
                                         <div className="flex items-center justify-between pt-6 border-t border-gray-50">
                                             <div className="flex items-center gap-3">
                                                 <div className="flex -space-x-2">
-                                                    {[...Array(3)].map((_, i) => (
+                                                    {[...Array(3)].map((_: any, i: number) => (
                                                         <div key={i} className="w-6 h-6 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center text-gray-400">
                                                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                                                         </div>

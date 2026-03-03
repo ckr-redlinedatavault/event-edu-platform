@@ -34,7 +34,7 @@ export default async function AdminRegistrationsPage({ params }: Props) {
     `, institution.id);
 
     // Map to template-compatible shape
-    const registrations = allRegistrations.map(reg => ({
+    const registrations = allRegistrations.map((reg: any) => ({
         id: reg.id,
         userId: reg.userId,
         eventId: reg.eventId,
@@ -92,7 +92,7 @@ export default async function AdminRegistrationsPage({ params }: Props) {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50">
-                                        {registrations.map((reg) => (
+                                        {registrations.map((reg: any) => (
                                             <tr key={reg.id} className="hover:bg-gray-50/30 transition-colors">
                                                 <td className="px-8 py-6">
                                                     <div className="flex items-center gap-4">

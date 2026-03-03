@@ -77,7 +77,7 @@ export default async function AdminEventsPage({ params }: Props) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-50">
-                                    {((institution as any).events as any[]).map((event) => (
+                                    {((institution as any).events as any[]).map((event: any) => (
                                         <tr key={event.id} className="hover:bg-gray-50/30 transition-colors">
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center gap-4">

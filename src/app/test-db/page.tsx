@@ -120,7 +120,7 @@ export default async function TestDBPage() {
                                     className="w-full p-2 rounded-lg border border-zinc-300 dark:bg-black dark:border-zinc-700"
                                 >
                                     <option value="">None</option>
-                                    {institutions.map(inst => (
+                                    {institutions.map((inst: any) => (
                                         <option key={inst.id} value={inst.id}>{inst.name}</option>
                                     ))}
                                 </select>
@@ -142,7 +142,7 @@ export default async function TestDBPage() {
                         {users.length === 0 ? (
                             <p className="text-zinc-500 italic col-span-2 text-center py-8">No users found. Run the SQL script in Supabase first.</p>
                         ) : (
-                            users.map((user) => (
+                            users.map((user: any) => (
                                 <div
                                     key={user.id}
                                     className="p-4 rounded-xl border border-zinc-100 bg-zinc-50 flex flex-col dark:bg-zinc-800 dark:border-zinc-700"

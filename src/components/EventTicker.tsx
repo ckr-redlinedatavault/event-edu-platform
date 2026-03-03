@@ -28,7 +28,7 @@ export default async function EventTicker() {
             <div className="flex w-fit items-center animate-scroll-left pause-scroll">
                 {/* Set 1 */}
                 <div className="flex items-center gap-16 px-8 shrink-0">
-                    {events.map((event, i) => (
+                    {events.map((event: any, i: number) => (
                         <div key={`${event.id}-${i}`} className="flex items-center gap-4 group cursor-pointer">
                             <span className="bg-white/15 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest text-white/90 border border-white/10 group-hover:bg-white group-hover:text-blue-600 transition-colors">
                                 Recent
@@ -43,7 +43,7 @@ export default async function EventTicker() {
 
                 {/* Set 2 (Identical for seamless looping) */}
                 <div className="flex items-center gap-16 px-8 shrink-0">
-                    {events.map((event, i) => (
+                    {events.map((event: any, i: number) => (
                         <div key={`${event.id}-dup-${i}`} className="flex items-center gap-4 group cursor-pointer">
                             <span className="bg-white/15 px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest text-white/90 border border-white/10 group-hover:bg-white group-hover:text-blue-600 transition-colors">
                                 Recent

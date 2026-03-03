@@ -251,7 +251,7 @@ export default async function InstitutionDashboard(props: PageProps) {
                                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2">Active Admin Team</p>
                                     <div className="flex items-center gap-2">
                                         <div className="flex -space-x-2">
-                                            {[1, 2, 3, 4].map(i => (
+                                            {[1, 2, 3, 4].map((i: number) => (
                                                 <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center overflow-hidden">
                                                     <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} className="w-full h-full" alt="avatar" />
                                                 </div>

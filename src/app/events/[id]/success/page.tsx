@@ -83,7 +83,7 @@ export default async function RegistrationSuccessPage({
 
                         {/* Edge Scallops - Right side only for clean entry look */}
                         <div className="absolute -right-3 top-0 bottom-0 flex flex-col justify-around py-4 z-20">
-                            {[...Array(6)].map((_, i) => (
+                            {[...Array(6)].map((_: any, i: number) => (
                                 <div key={i} className="w-6 h-6 bg-[#F1F3F6] rounded-full translate-x-1/2 ring-1 ring-inset ring-slate-100"></div>
                             ))}
                         </div>
@@ -186,7 +186,7 @@ export default async function RegistrationSuccessPage({
                             <div className="relative w-full h-[2px] md:w-3 md:h-auto flex flex-col items-center justify-around py-5 bg-white shrink-0 z-20">
                                 <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[1px] border-l-[1px] border-dashed border-slate-100"></div>
                                 <div className="flex flex-col justify-between h-full py-2 z-10">
-                                    {[...Array(6)].map((_, i) => (
+                                    {[...Array(6)].map((_: any, i: number) => (
                                         <div key={i} className="w-0.5 h-0.5 bg-[#F1F3F6] rounded-full ring-[0.5px] ring-slate-200/10"></div>
                                     ))}
                                 </div>

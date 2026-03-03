@@ -13,7 +13,7 @@ export default async function TopBanner() {
     return (
         <div className="bg-black text-white h-10 flex items-center overflow-hidden whitespace-nowrap relative z-[60]">
             <div className="flex animate-scroll-left pause-scroll gap-12 px-4">
-                {[...latestEvents, ...latestEvents].map((event, i) => (
+                {[...latestEvents, ...latestEvents].map((event: any, i: number) => (
                     <Link
                         key={`${event.id}-${i}`}
                         href={`/institution/${event.institution.slug}/event/${event.id}`}

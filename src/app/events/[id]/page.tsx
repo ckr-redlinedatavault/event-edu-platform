@@ -173,7 +173,7 @@ export default async function EventDetailPage({
                                             <h2 className="text-sm font-black uppercase tracking-widest text-slate-800">Judges & Experts</h2>
                                         </div>
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pl-11">
-                                            {(event.judges as any[]).map((judge, i) => (
+                                            {(event.judges as any[]).map((judge: any, i: number) => (
                                                 <div key={i} className="group relative">
                                                     <div className="aspect-square rounded-2xl bg-white border border-slate-100 overflow-hidden mb-3 group-hover:border-indigo-200 transition-all shadow-sm">
                                                         <img
@@ -201,7 +201,7 @@ export default async function EventDetailPage({
 
                                     <div className="space-y-3 pl-11">
                                         {event.ticketTiers && (event.ticketTiers as any[]).length > 0 ? (
-                                            (event.ticketTiers as any[]).map((tier, i) => (
+                                            (event.ticketTiers as any[]).map((tier: any, i: number) => (
                                                 <div key={i} className="flex justify-between items-center p-5 bg-white rounded-2xl border border-slate-100/80 hover:border-emerald-200 transition-all shadow-sm">
                                                     <div className="flex items-center gap-4">
                                                         <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400">

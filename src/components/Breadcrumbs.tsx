@@ -22,7 +22,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                 <span>Home</span>
             </Link>
 
-            {items.map((item, index) => (
+            {items.map((item, index: number) => (
                 <div key={item.href} className="flex items-center gap-2">
                     <ChevronRight size={10} className="text-slate-300" />
                     {item.active ? (
