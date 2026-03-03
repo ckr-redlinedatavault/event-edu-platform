@@ -1,5 +1,9 @@
 # EventEdu Platform
 
+[Tech Stack](#tech-stack) | [Features](#features) | [Setup](#development-setup) | [Deployment](#deployment)
+
+---
+
 A high-performance, institutional event management infrastructure designed for scalability and seamless student engagement.
 
 ---
@@ -18,12 +22,16 @@ A high-performance, institutional event management infrastructure designed for s
 
 ---
 
-### Core Modules
+### Features
 
-*   **Super Admin GCHQ:** Global system oversight, institution management, and platform-wide analytics.
-*   **Institutional Control:** Dedicated dashboards for college administrators to deploy events and manage registries.
-*   **Smart Ticketing:** Automated QR code generation and PDF ticket delivery for participants.
-*   **Dynamic Discovery:** Automated event feeds and institutional public showcases.
+| Feature | Description |
+| :--- | :--- |
+| **Global Overlord Dashboard** | Total control over institutions, events, and system-wide analytics. |
+| **Institutional Portals** | Dedicated management for college admins to host and track events. |
+| **Automated Ticketing** | Instant QR code generation with high-resolution PDF delivery. |
+| **Smart Registration** | Multi-tier ticketing with real-time capacity monitoring. |
+| **Event Discovery** | Institutional event feeds with advanced filtering and search. |
+| **Smooth Experience** | Modern UI with smooth scrolling and dynamic micro-animations. |
 
 ---
 
