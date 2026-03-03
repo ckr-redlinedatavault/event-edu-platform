@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="public/logo.png" alt="EventEdu Logo" width="200" />
+</div>
+
 # EventEdu Platform
 
 [Tech Stack](#tech-stack) | [Features](#features) | [Setup](#development-setup) | [Deployment](#deployment)
